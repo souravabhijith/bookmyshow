@@ -76,7 +76,7 @@ public class SeatService implements ISeatService {
                     //No Entry for this seat is yet created. We are creating now.
                     //Since we are having a composite key of show_id,seat_number, we cant have 2 rows
                     //for same seat. MySQL DB implements row level locking so consistent
-                    //updates for same row are serialized
+                    //updates for same row are serialized.
                     ShowSeatBooking seatBooking = new ShowSeatBooking(show, booking, SeatStatus.RESERVED, seatNumber);
                     seatBooking.setShow(show);
                     showSeatBookingRepository.save(seatBooking);

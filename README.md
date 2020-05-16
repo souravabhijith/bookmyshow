@@ -21,11 +21,13 @@ user2 - user2
 3. In the api key input box, Type `Bearer`` followed by space and paste the token you copied before.
 ```dtd
 if token is abcd
-api key would be 
+api key would be s
 Bearer abcd
 ```
 
 4. You can now make other api calls.
+
+5. Check this Demo https://youtu.be/1tzVyU3kJPI (Open in a new tab)
 
 #### Database Schema
 
