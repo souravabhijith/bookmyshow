@@ -1,5 +1,6 @@
 package com.example.bookmyshow.controllers;
 
+import com.example.bookmyshow.dto.ShowDTO;
 import com.example.bookmyshow.dto.ShowsDTO;
 import com.example.bookmyshow.entities.City;
 import com.example.bookmyshow.entities.Movie;
@@ -10,9 +11,7 @@ import com.example.bookmyshow.repositories.MovieRepository;
 import com.example.bookmyshow.repositories.ShowRepository;
 import com.example.bookmyshow.repositories.TheatreRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +35,9 @@ public class ShowController {
 
     @Autowired
     CityRepository cityRepository;
+
+    @Autowired
+    TheatreRepository theatreRepository;
 
     @Autowired
     MovieRepository movieRepository;
@@ -70,13 +72,14 @@ public class ShowController {
         List<Show> shows = showRepository.getShowsForCity(cityObj.getId());
         Set<Movie> moviesPlaying = new HashSet<>();
         for (Show show : shows) {
+            //TODO Exclude movies which dont have date >= currentDate
             moviesPlaying.add(show.getMovie());
         }
         String body = objectMapper.writeValueAsString(moviesPlaying);
         return ResponseEntity.ok().body(body);
     }
 
-    @ApiOperation(value = "Lists All shows for a city and movieID", produces = "application/json")
+    @ApiOperation(value = "Lists All shows for a city and movieID for a date", produces = "application/json")
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message = "list")
@@ -85,6 +88,7 @@ public class ShowController {
     @GetMapping(value = "/{city}/movies/{movieID}", produces = { "application/json"})
     public ResponseEntity<String> showMoviesInCity(@PathVariable("city") String city,
                                                    @PathVariable("movieID") Long movieID,
+                                                   @ApiParam(example = "2020-05-16")
                                                    @RequestParam(required = true) String dateStr) throws Exception {
         City cityObj= cityRepository.findByName(city);
         if (cityObj == null) {
@@ -108,7 +112,12 @@ public class ShowController {
             }
     )
     @PostMapping("")
-    public ResponseEntity<String> createShow(@RequestBody Show show) throws Exception {
+    public ResponseEntity<String> createShow(@RequestBody ShowDTO showDTO) throws Exception {
+        Theatre theatre = theatreRepository.findById(showDTO.getTheatre_id()).get();
+        Movie movie = movieRepository.findById(showDTO.getMovie_id()).get();
+        Date date = getDate(showDTO.getDate());
+        Date startTime = getStartTime(showDTO.getStarttime());
+        Show show = new Show(theatre, movie, showDTO.getShow_number(), startTime, date);
         Show saved = showRepository.save(show);
         return ResponseEntity.ok().body("Show saved with id : " + saved.getId());
     }
@@ -123,5 +132,23 @@ public class ShowController {
         } catch (Exception e) {
             return null;
         }
+    }
+
+
+    public Date getStartTime(String time) {
+        time = getCurrentDateWithoutTime() + " " + time;
+        SimpleDateFormat formatter =new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            return formatter.parse(time);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getCurrentDateWithoutTime() {
+        Date date = new Date();
+        SimpleDateFormat formatter =new SimpleDateFormat("yyyy-MM-dd");
+        String newDateStr = formatter.format(date);
+        return newDateStr.substring(0,10);
     }
 }

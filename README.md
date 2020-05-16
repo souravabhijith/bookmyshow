@@ -10,6 +10,23 @@ mvn clean install
 ```
 Once started go to http://localhost:8090/swagger-ui.html to explore the apis
 
+#### Flow
+1. First you need to login using login controller with any of the below username-pwd combinations
+```dtd
+admin - admin
+user1 - user1
+user2 - user2
+```
+2. In response you will get a JWT Token. You need to copy this and click on Authorize on top right
+3. In the api key input box, Type `Bearer`` followed by space and paste the token you copied before.
+```dtd
+if token is abcd
+api key would be 
+Bearer abcd
+```
+
+
+
 #### Database Schema
 
 Only listed important keys. Actual columns are present in entities package.
@@ -55,6 +72,8 @@ User
 - password
 - role
 ```
+
+
 
 ### Reference Documentation
 For further reference, please consider the following sections:

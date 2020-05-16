@@ -82,22 +82,22 @@ public class StartupMockData {
 
     public void createShows() {
         showRepository.save(new Show(theatreMap.get("pvr"),
-                                     movieMap.get(1L), 1, getTime("09:00"), getDate("2020-05-16")));
+                                     movieMap.get(1L), 1, getStartTime("09:00"), getDate("2020-05-16")));
         showRepository.save(new Show(theatreMap.get("pvr"),
-                                     movieMap.get(2L), 1, getTime("09:00"), getDate("2020-05-16")));
+                                     movieMap.get(2L), 1, getStartTime("09:00"), getDate("2020-05-16")));
         showRepository.save(new Show(theatreMap.get("inox"),
-                                     movieMap.get(1L), 1, getTime("09:00"), getDate("2020-05-16")));
+                                     movieMap.get(1L), 1, getStartTime("09:00"), getDate("2020-05-16")));
         showRepository.save(new Show(theatreMap.get("inox"),
-                                     movieMap.get(1L), 2, getTime("12:00"), getDate("2020-05-16")));
+                                     movieMap.get(1L), 2, getStartTime("12:00"), getDate("2020-05-16")));
         showRepository.save(new Show(theatreMap.get("inox"),
-                                     movieMap.get(1L), 3, getTime("20:00"), getDate("2020-05-16")));
+                                     movieMap.get(1L), 3, getStartTime("20:00"), getDate("2020-05-16")));
         showRepository.save(new Show(theatreMap.get("pvr-blr"),
-                                     movieMap.get(1L), 1, getTime("12:00"), getDate("2020-05-16")));
+                                     movieMap.get(1L), 1, getStartTime("12:00"), getDate("2020-05-16")));
 
     }
 
-    public Date getTime(String time) {
-        time = getCurrentDate() + " " + time;
+    public Date getStartTime(String time) {
+        time = getCurrentDateWithoutTime() + " " + time;
         SimpleDateFormat formatter =new SimpleDateFormat("yyyy-MM-dd HH:mm");
         try {
             return formatter.parse(time);
@@ -106,7 +106,7 @@ public class StartupMockData {
         }
     }
 
-    public String getCurrentDate() {
+    public String getCurrentDateWithoutTime() {
         Date date = new Date();
         SimpleDateFormat formatter =new SimpleDateFormat("yyyy-MM-dd");
         String newDateStr = formatter.format(date);

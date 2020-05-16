@@ -5,6 +5,7 @@ import com.example.bookmyshow.repositories.*;
 import com.example.bookmyshow.services.ISeatService;
 import com.example.bookmyshow.services.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -94,7 +95,17 @@ public class BookingController {
         Booking booking = bookingOptional.get();
         List<ShowSeatBooking> seats = showSeatBookingRepository.findSeatsByBookingID(bookingID);
         ObjectNode result = objectMapper.createObjectNode();
+        result.put("id" ,bookingID);
+        result.put("status" ,booking.getStatus().name());
+        result.put("user_name" ,booking.getUser().getUsername());
+        result.put("date" ,booking.getShow().getStarttime().toString());
+        result.put("seatsBooked" ,booking.getNumberOfSeats());
 
+        ArrayNode seatNumbersArr = objectMapper.createArrayNode();
+        for (ShowSeatBooking seatBooking : seats) {
+            seatNumbersArr.add(seatBooking.getSeat_number());
+        }
+        result.set("seatNumbers" , seatNumbersArr);
 
         return ResponseEntity.ok().body(result.toString());
     }

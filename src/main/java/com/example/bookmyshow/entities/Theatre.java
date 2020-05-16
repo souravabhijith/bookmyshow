@@ -38,6 +38,12 @@ public class Theatre {
         this.city = city;
     }
 
+    public Theatre(String name,City city, int seats) {
+        this.name = name;
+        this.maxSeats = seats;
+        this.city = city;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,7 +1,9 @@
 package com.example.bookmyshow.controllers;
 
+import com.example.bookmyshow.dto.TheatreDTO;
+import com.example.bookmyshow.entities.City;
 import com.example.bookmyshow.entities.Theatre;
-import com.example.bookmyshow.repositories.ActivityRepository;
+import com.example.bookmyshow.repositories.CityRepository;
 import com.example.bookmyshow.repositories.TheatreRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +29,9 @@ public class TheatreController {
     @Autowired
     TheatreRepository theatreRepository;
 
+    @Autowired
+    CityRepository cityRepository;
+
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -49,8 +54,9 @@ public class TheatreController {
             }
     )
     @PostMapping("")
-    public ResponseEntity<String> createTheatre(@RequestBody Theatre theatre) throws Exception {
-        Theatre saved = theatreRepository.save(theatre);
+    public ResponseEntity<String> createTheatre(@RequestBody TheatreDTO theatreDTO) throws Exception {
+        City city = cityRepository.findByName(theatreDTO.getCity());
+        Theatre saved = theatreRepository.save(new Theatre(theatreDTO.getName(), city, theatreDTO.getSeats()));
         return ResponseEntity.ok().body("Theatre saved with id : " + saved.getId());
     }
 

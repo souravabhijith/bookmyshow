@@ -5,6 +5,7 @@
 
 package com.example.bookmyshow.entities;
 
+import com.example.bookmyshow.dto.ShowDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
@@ -38,10 +39,12 @@ public class Show {
     Integer show_number;
 
 
+    @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date starttime;
 
 
+    @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private Date date;
 
@@ -57,6 +60,7 @@ public class Show {
         this.starttime = starttime;
         this.date = date;
     }
+
 
     public void setShow_number(Integer show_number) {
         this.show_number = show_number;
