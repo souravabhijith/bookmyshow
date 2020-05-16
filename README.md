@@ -25,7 +25,7 @@ api key would be
 Bearer abcd
 ```
 
-
+4. You can now make other api calls.
 
 #### Database Schema
 
